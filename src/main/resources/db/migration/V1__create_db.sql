@@ -1,0 +1,29 @@
+CREATE TABLE client (
+	id INT NOT NULL AUTO_INCREMENT,
+	name VARCHAR NOT NULL CHECK(LENGTH(name) >=3 AND LENGTH(name) <= 200),
+	PRIMARY KEY (id)
+);
+
+CREATE TABLE planet (
+	id VARCHAR NOT NULL CHECK (NOT id REGEXP '[^A-Z0-9]'),
+	name VARCHAR NOT NULL CHECK(LENGTH(name) >=1 AND LENGTH(name) <= 500),
+	PRIMARY KEY (id)
+);
+
+CREATE TABLE ticket (
+	id INT NOT NULL AUTO_INCREMENT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+	client_id INT NOT NULL,
+	from_planet_id VARCHAR NOT NULL,
+	to_planet_id VARCHAR NOT NULL,
+	PRIMARY KEY (id)
+);
+
+ALTER TABLE ticket ADD CONSTRAINT fk_client_id
+FOREIGN KEY (client_id) REFERENCES client(id) ON DELETE CASCADE;
+
+ALTER TABLE ticket ADD CONSTRAINT fk_from_planet_id
+FOREIGN KEY (from_planet_id) REFERENCES planet(id) ON DELETE CASCADE;
+
+ALTER TABLE ticket ADD CONSTRAINT fk_to_planet_id
+FOREIGN KEY (to_planet_id) REFERENCES planet(id) ON DELETE CASCADE;
